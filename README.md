@@ -39,9 +39,9 @@ Given code:
 
 Implemented:
 
-* Bump mapped terrain
-* Rim lighting to simulate atmosphere
-* Night-time lights on the dark side of the globe
-* Specular mapping
-* Moving clouds
+* Bump mapped terrain (using a height-map input)
+* Rim lighting to simulate atmospheric scattering (on lit parts of the globe)
+* Night-time lights on the dark side of the globe (smoothly blended)
+* Specular mapping (showing specularity on the water)
+* Moving clouds (using a cloud layer)
 * TODO

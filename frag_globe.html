@@ -109,6 +109,10 @@
 
         vec3 color = mix(cloud * diffuse, surfaceColor, cloudTrans);
 
+        float rim = max(0.0, 1.5 + dot(v_Normal, v_Position));
+        vec3 rimcolor = vec3(0.2, 0.3, 0.4) * rim;
+        color += rimcolor * (blendfactor + 0.3);
+
         gl_FragColor = vec4(color, 1.0);
     }
 
