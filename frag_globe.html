@@ -87,7 +87,8 @@
         vec3 dayColor = texture2D(u_DayDiffuse, v_Texcoord).rgb;
         // Gamma correction
         dayColor = pow(dayColor, vec3(1.0 / 1.4));
-        dayColor *= (0.8 * diffuse) + (0.2 * specular);
+        float specularity = texture2D(u_EarthSpec, v_Texcoord).r;
+        dayColor *= (0.8 * diffuse) + (0.4 * specular * specularity);
 
         vec3 nightColor = texture2D(u_Night, v_Texcoord).rgb;
         // Gamma correction
