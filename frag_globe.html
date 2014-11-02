@@ -73,8 +73,14 @@
 
     void main(void)
     {
+        float b_center = texture2D(u_Bump, v_Texcoord).r;
+        float b_right  = texture2D(u_Bump, v_Texcoord + vec2(1.0 / 1024.0, 0)).r;
+        float b_top    = texture2D(u_Bump, v_Texcoord + vec2(0, 1.0 / 512.0)).r;
+
+        vec3 b_nor = normalize(vec3(b_center - b_right, b_center - b_top, 0.2));
+        b_nor = eastNorthUpToEyeCoordinates(v_Position, v_Normal) * b_nor;
         // surface normal - normalized after rasterization
-        vec3 normal = normalize(v_Normal);
+        vec3 normal = normalize(b_nor);
         // normalized eye-to-position vector in camera coordinates
         vec3 eyeToPosition = normalize(v_Position);
 
