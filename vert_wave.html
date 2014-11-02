@@ -5,19 +5,24 @@
 <meta charset ="utf-8">
 <meta http-equiv="X-UA-Compatible" content="chrome=1">  <!-- Use Chrome Frame in IE -->
 
-<script src ="js/lib/gl-matrix.js" type ="text/javascript"></script>
-<script src ="js/webGLUtility.js" type ="text/javascript"></script>
+<script src="js/lib/gl-matrix.js"   type="text/javascript"></script>
+<script src="js/webGLUtility.js"    type="text/javascript"></script>
 <script src="js/lib/dat.gui.min.js" type="text/javascript"></script>
 
 <script id="vs" type="x-shader/x-vertex">
 attribute vec2 position;
 
 uniform mat4 u_modelViewPerspective;
+uniform float u_time;
+
+varying float v_height;
 
 void main(void)
 {
-    // NOTE : according to the WebGL standard, 0.0f is not accepted float
-    float height = 0.0;
+    float s_contrib = sin(position.x * 2.0 * 3.14159 + u_time);
+    float t_contrib = cos(position.y * 2.0 * 3.14159 + u_time);
+    float height = s_contrib * t_contrib;
+    v_height = height;
 
     // NOTE : gl_Position is always a vec4
     gl_Position = u_modelViewPerspective * vec4(vec3(position, height), 1.0);
@@ -27,12 +32,15 @@ void main(void)
 <script id="fs" type="x-shader/x-fragment">
 precision mediump float;
 
-uniform vec4 u_color;
+uniform vec4 u_colorMax;
+uniform vec4 u_colorMin;
+
+varying float v_height;
 
 void main(void)
 {
     // NOTE : gl_FragColor is always a vec4
-    gl_FragColor = u_color;
+    gl_FragColor = mix(u_colorMin, u_colorMax, (v_height + 1.0) * 0.5);
 }
 </script>
 
@@ -41,7 +49,13 @@ void main(void)
 var positionLocation = 0;
 var heightLocation = 1;
 var u_modelViewPerspectiveLocation;
-var u_color;
+var u_colorMinLocation;
+var u_colorMaxLocation;
+
+var colors = {
+    minColor: [1.0 * 255, 0.2 * 255, 0.0 * 255, 1.0],
+    maxColor: [0.0 * 255, 0.8 * 255, 1.0 * 255, 1.0],
+};
 
 var heights;
 var numberOfIndices;
@@ -65,6 +79,9 @@ var view = mat4.create();
 window.onload = function() {
     // Add GUI component
     var gui = new dat.GUI();
+
+    gui.addColor(colors, 'maxColor').onChange(setColors);
+    gui.addColor(colors, 'minColor').onChange(setColors);
 
     init();
 
@@ -91,8 +108,12 @@ function init() {
 
     initializeShader();
     initializeGrid();
+
+    setColors();
 }
 
+var currtime = 0.0;
+var timestep = 0.01;
 
 function animate(){
     // Update
@@ -107,10 +128,21 @@ function animate(){
     // Render
     context.clear(context.COLOR_BUFFER_BIT | context.DEPTH_BUFFER_BIT);
 
+    currtime += 0.01;
+    context.uniform1f(u_timeLocation, currtime);
     context.uniformMatrix4fv(u_modelViewPerspectiveLocation, false, mvp);
     context.drawElements(context.LINES, numberOfIndices, context.UNSIGNED_SHORT,0);
 
     window.requestAnimFrame(animate);
+}
+
+function setColors() {
+    var c1 = colors.minColor;
+    var c2 = colors.maxColor;
+    context.uniform4f(u_colorMinLocation,
+            c1[0] / 255.0, c1[1] / 255.0, c1[2] / 255.0, c1[3]);
+    context.uniform4f(u_colorMaxLocation,
+            c2[0] / 255.0, c2[1] / 255.0, c2[2] / 255.0, c2[3]);
 }
 
 function initializeShader() {
@@ -121,7 +153,9 @@ function initializeShader() {
     var program = createProgram(context, vs, fs, message);
     context.bindAttribLocation(program, positionLocation, "position");
     u_modelViewPerspectiveLocation = context.getUniformLocation(program,"u_modelViewPerspective");
-    u_colorLocation = context.getUniformLocation(program, "u_color");
+    u_colorMinLocation = context.getUniformLocation(program, "u_colorMin");
+    u_colorMaxLocation = context.getUniformLocation(program, "u_colorMax");
+    u_timeLocation = context.getUniformLocation(program, "u_time");
 
     context.useProgram(program);
 }
