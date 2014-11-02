@@ -18,3 +18,5 @@ Implemented:
 * A parametric surface (mobius band) vertex shader
     * Interprets input (x, y) position as (s, t) of a parametric surface and
       moves the vertices to the (x, y, z) calculated parametrically from (s, t).
+
+![](images/mobius.png)

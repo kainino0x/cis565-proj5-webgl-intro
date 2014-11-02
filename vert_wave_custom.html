@@ -21,7 +21,7 @@ varying float v_height;
 
 void main(void)
 {
-    float s = mix(0.0, 2.0 * PI, position.x);
+    float s = mix(0.0, 1.8 * PI, position.x) + u_time;
     float t = mix(-2.0, 2.0, position.y);
     float height = s * t * (s * s - t * t) / (s * s + t * t + 0.000001);
     vec3 pos = vec3(2.0 * cos(s) + t * cos(s * 0.5),
