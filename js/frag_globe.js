@@ -233,6 +233,7 @@
     document.onmouseup = handleMouseUp;
     document.onmousemove = handleMouseMove;
 
+    var currtime = 0.0;
 
     function animate() {
         ///////////////////////////////////////////////////////////////////////////
@@ -267,6 +268,8 @@
         gl.uniformMatrix4fv(u_InvTransLocation, false, invTrans);
 
         gl.uniform3fv(u_CameraSpaceDirLightLocation, lightdir);
+        gl.uniform1f(u_timeLocation, currtime);
+        currtime += 1.0;
 
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, dayTex);

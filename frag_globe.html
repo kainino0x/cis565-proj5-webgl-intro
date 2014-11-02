@@ -95,7 +95,13 @@
         nightColor = pow(nightColor, vec3(1.0 / 1.2));
         float blendfactor = pow(diffuse, 0.7);
 
-        vec3 color = mix(nightColor, dayColor, blendfactor);
+        vec3 surfaceColor = mix(nightColor, dayColor, blendfactor);
+
+        vec2 cloudTC = v_Texcoord + vec2(u_time * -0.0001, 0);
+        vec3 cloud = texture2D(u_Cloud, cloudTC).rgb;
+        float cloudTrans = texture2D(u_CloudTrans, cloudTC).r;
+
+        vec3 color = mix(cloud * diffuse, surfaceColor, cloudTrans);
 
         gl_FragColor = vec4(color, 1.0);
     }
