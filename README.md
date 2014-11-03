@@ -46,4 +46,15 @@ Implemented:
 * Night-time lights on the dark side of the globe (smoothly blended)
 * Specular mapping (showing specularity on the water)
 * Moving clouds (using a cloud layer)
-* TODO
+* Procedural water rendering and animation using noise
+  * Noise library (c) Ashima Arts. Used under MIT License.
+    https://github.com/ashima/webgl-noise
+
+
+References/Libraries
+--------------------
+
+* webgl-noise. Copyright 2011 Ashima Arts. Used under MIT License.
+  https://github.com/ashima/webgl-noise
+* stats.js. Copyright 2009-2012 Mr.doob. Used under MIT License.
+  https://github.com/mrdoob/stats.js
