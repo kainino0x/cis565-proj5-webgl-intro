@@ -63,6 +63,10 @@ optimizations.
 * Factored out the first two rotations of the model matrix calculation
 * Only set the earth texture uniforms once
 
+Afterward:
+
+![](images/globe_trace_after.png)
+
 
 References/Libraries
 --------------------
