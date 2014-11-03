@@ -2,6 +2,7 @@ CIS 565 Project 5: WebGL
 ========================
 
 * Kai Ninomiya (Arch Linux, Intel i5-2410M)
+  (Performance numbers taken on i5-4xxx/GTX 750)
 
 **[Live demo](https://kainino0x.github.io/Project5-WebGL/)**
 
@@ -59,19 +60,22 @@ rendering time of each frame, due to lack of granularity (it always showed 0 or
 measurements. Additionally, using Ben Vanik's WebGL Inspector, I was able to
 find and make a few optimizations.
 
-Before optimization:
+* Factored out the first two rotations of the model matrix calculation
+* Only set the earth texture uniforms once
+* Only compute the light position and camera matrices when the camera is moved
 
-| Total rendering time over 300 frames | ~xxx ms |
+|   | Total rendering time over 300 frames |
+|:- | ------------------------------------:|
+| Before optimization | ~18.5 ms |
+| + Factored out model matrix calculation | ~16.5 ms |
+| + Fewer texture uniform sets | ~15.5 ms |
+| + Fewer uniform uploads | ~14.5 ms |
+
+Before optimization:
 
 ![](images/globe_trace.png)
 
-* Only compute the light position and camera matrix when the camera is moved
-* Factored out the first two rotations of the model matrix calculation
-* Only set the earth texture uniforms once
-
 After optimization:
-
-| Total rendering time over 300 frames | ~xxx ms |
 
 ![](images/globe_trace_after.png)
 
