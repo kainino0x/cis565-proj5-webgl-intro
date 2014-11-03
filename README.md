@@ -7,6 +7,8 @@ CIS 565 Project 5: WebGL
 Part 1
 ------
 
+![](images/mobius.png)
+
 Given code:
 
 * Drawing a VBO through WebGL
@@ -20,11 +22,11 @@ Implemented:
   * Interprets input (x, y) position as (s, t) of a parametric surface and
     moves the vertices to the (x, y, z) calculated parametrically from (s, t).
 
-![](images/mobius.png)
-
 
 Part 2
 ------
+
+![](images/globe.png)
 
 Given code:
 
