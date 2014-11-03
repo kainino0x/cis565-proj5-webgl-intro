@@ -259,6 +259,7 @@
         var invTrans = mat4.create();
         mat4.inverse(mv, invTrans);
         mat4.transpose(invTrans);
+        gl.uniformMatrix4fv(u_InvTransLocation, false, invTrans);
 
         ///////////////////////////////////////////////////////////////////////////
         // Render
@@ -269,7 +270,6 @@
         if (!cameraset) {
             gl.uniformMatrix4fv(u_ViewLocation, false, view);
             gl.uniformMatrix4fv(u_PerspLocation, false, persp);
-            gl.uniformMatrix4fv(u_InvTransLocation, false, invTrans);
 
             var lightdir = vec3.create([1.0, 0.0, 1.0]);
             var lightdest = vec4.create();
