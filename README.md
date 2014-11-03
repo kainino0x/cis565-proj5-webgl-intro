@@ -3,6 +3,8 @@ CIS 565 Project 5: WebGL
 
 * Kai Ninomiya (Arch Linux, Intel i5-2410M)
 
+**[Live demo](https://kainino0x.github.io/Project5-WebGL/)**
+
 
 Part 1
 ------
@@ -57,13 +59,15 @@ process offloading (Stats.js [2] always showed 0 or 1 ms per frame).
 However, using Ben Vanik's WebGL Inspector, I was able to find and make a few
 optimizations.
 
+Before optimization:
+
 ![](images/globe_trace.png)
 
 * Only compute the light position and camera matrix when the camera is moved
 * Factored out the first two rotations of the model matrix calculation
 * Only set the earth texture uniforms once
 
-Afterward:
+After optimization:
 
 ![](images/globe_trace_after.png)
 
@@ -73,5 +77,6 @@ References/Libraries
 
 [1] webgl-noise. Copyright 2011 Ashima Arts. Used under MIT License.
     https://github.com/ashima/webgl-noise
+
 [2] stats.js. Copyright 2009-2012 Mr.doob. Used under MIT License.
     https://github.com/mrdoob/stats.js
