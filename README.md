@@ -47,14 +47,27 @@ Implemented:
 * Specular mapping (showing specularity on the water)
 * Moving clouds (using a cloud layer)
 * Procedural water rendering and animation using noise
-  * Noise library (c) Ashima Arts. Used under MIT License.
-    https://github.com/ashima/webgl-noise
+  * Noise library (c) Ashima Arts. Used under MIT License. [1]
+
+### Performance
+
+I found that I was unable to capture any meaningful data on the actual
+rendering time of each frame, due to lack of granularity and asynchronous GPU
+process offloading (Stats.js [2] always showed 0 or 1 ms per frame).
+However, using Ben Vanik's WebGL Inspector, I was able to find and make a few
+optimizations.
+
+![](images/globe_trace.png)
+
+* Only compute the light position and camera matrix when the camera is moved
+* Factored out the first two rotations of the model matrix calculation
+* Only set the earth texture uniforms once
 
 
 References/Libraries
 --------------------
 
-* webgl-noise. Copyright 2011 Ashima Arts. Used under MIT License.
-  https://github.com/ashima/webgl-noise
-* stats.js. Copyright 2009-2012 Mr.doob. Used under MIT License.
-  https://github.com/mrdoob/stats.js
+[1] webgl-noise. Copyright 2011 Ashima Arts. Used under MIT License.
+    https://github.com/ashima/webgl-noise
+[2] stats.js. Copyright 2009-2012 Mr.doob. Used under MIT License.
+    https://github.com/mrdoob/stats.js

@@ -180,6 +180,7 @@
     var mouseRightDown = false;
     var lastMouseX = null;
     var lastMouseY = null;
+    var cameraset = false;
 
     function handleMouseDown(event) {
         if( event.button == 2 ) {
@@ -223,6 +224,7 @@
         eye = sphericalToCartesian(radius, azimuth, elevation);
         view = mat4.create();
         mat4.lookAt(eye, center, up, view);
+        cameraset = false;
 
         lastMouseX = newX;
         lastMouseY = newY;
@@ -233,16 +235,17 @@
     document.onmouseup = handleMouseUp;
     document.onmousemove = handleMouseMove;
 
-    var currtime = 0.0;
+    var earthtexbound = false;
+    var modelbase = mat4.create();
+    mat4.identity(modelbase);
+    mat4.rotate(modelbase, 23.4 / 180 * Math.PI, [0.0, 0.0, 1.0]);
+    mat4.rotate(modelbase, Math.PI, [1.0, 0.0, 0.0]);
+
 
     function animate() {
         ///////////////////////////////////////////////////////////////////////////
         // Update
-
-        var model = mat4.create();
-        mat4.identity(model);
-        mat4.rotate(model, 23.4/180*Math.PI, [0.0, 0.0, 1.0]);
-        mat4.rotate(model, Math.PI, [1.0, 0.0, 0.0]);
+        var model = mat4.create(modelbase);
         mat4.rotate(model, -time, [0.0, 1.0, 0.0]);
         var mv = mat4.create();
         mat4.multiply(view, model, mv);
@@ -251,44 +254,49 @@
         mat4.inverse(mv, invTrans);
         mat4.transpose(invTrans);
 
-        var lightdir = vec3.create([1.0, 0.0, 1.0]);
-        var lightdest = vec4.create();
-        vec3.normalize(lightdir);
-        mat4.multiplyVec4(view, [lightdir[0], lightdir[1], lightdir[2], 0.0], lightdest);
-        lightdir = vec3.createFrom(lightdest[0],lightdest[1],lightdest[2]);
-        vec3.normalize(lightdir);
-
         ///////////////////////////////////////////////////////////////////////////
         // Render
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+        gl.uniform1f(u_timeLocation, time);
         gl.uniformMatrix4fv(u_ModelLocation, false, model);
-        gl.uniformMatrix4fv(u_ViewLocation, false, view);
-        gl.uniformMatrix4fv(u_PerspLocation, false, persp);
-        gl.uniformMatrix4fv(u_InvTransLocation, false, invTrans);
+        if (!cameraset) {
+            gl.uniformMatrix4fv(u_ViewLocation, false, view);
+            gl.uniformMatrix4fv(u_PerspLocation, false, persp);
+            gl.uniformMatrix4fv(u_InvTransLocation, false, invTrans);
 
-        gl.uniform3fv(u_CameraSpaceDirLightLocation, lightdir);
-        gl.uniform1f(u_timeLocation, currtime);
-        currtime += 1.0;
+            var lightdir = vec3.create([1.0, 0.0, 1.0]);
+            var lightdest = vec4.create();
+            vec3.normalize(lightdir);
+            mat4.multiplyVec4(view, [lightdir[0], lightdir[1], lightdir[2], 0.0], lightdest);
+            lightdir = vec3.createFrom(lightdest[0],lightdest[1],lightdest[2]);
+            vec3.normalize(lightdir);
+            gl.uniform3fv(u_CameraSpaceDirLightLocation, lightdir);
 
-        gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, dayTex);
-        gl.uniform1i(u_DayDiffuseLocation, 0);
-        gl.activeTexture(gl.TEXTURE1);
-        gl.bindTexture(gl.TEXTURE_2D, bumpTex);
-        gl.uniform1i(u_BumpLocation, 1);
-        gl.activeTexture(gl.TEXTURE2);
-        gl.bindTexture(gl.TEXTURE_2D, cloudTex);
-        gl.uniform1i(u_CloudLocation, 2);
-        gl.activeTexture(gl.TEXTURE3);
-        gl.bindTexture(gl.TEXTURE_2D, transTex);
-        gl.uniform1i(u_CloudTransLocation, 3);
-        gl.activeTexture(gl.TEXTURE4);
-        gl.bindTexture(gl.TEXTURE_2D, lightTex);
-        gl.uniform1i(u_NightLocation, 4);
-        gl.activeTexture(gl.TEXTURE5);
-        gl.bindTexture(gl.TEXTURE_2D, specTex);
-        gl.uniform1i(u_EarthSpecLocation, 5);
+            cameraset = true;
+        }
+
+        if (!earthtexbound) {
+            gl.activeTexture(gl.TEXTURE0);
+            gl.bindTexture(gl.TEXTURE_2D, dayTex);
+            gl.uniform1i(u_DayDiffuseLocation, 0);
+            gl.activeTexture(gl.TEXTURE1);
+            gl.bindTexture(gl.TEXTURE_2D, bumpTex);
+            gl.uniform1i(u_BumpLocation, 1);
+            gl.activeTexture(gl.TEXTURE2);
+            gl.bindTexture(gl.TEXTURE_2D, cloudTex);
+            gl.uniform1i(u_CloudLocation, 2);
+            gl.activeTexture(gl.TEXTURE3);
+            gl.bindTexture(gl.TEXTURE_2D, transTex);
+            gl.uniform1i(u_CloudTransLocation, 3);
+            gl.activeTexture(gl.TEXTURE4);
+            gl.bindTexture(gl.TEXTURE_2D, lightTex);
+            gl.uniform1i(u_NightLocation, 4);
+            gl.activeTexture(gl.TEXTURE5);
+            gl.bindTexture(gl.TEXTURE_2D, specTex);
+            gl.uniform1i(u_EarthSpecLocation, 5);
+            earthtexbound = true;
+        }
         gl.drawElements(gl.TRIANGLES, numberOfIndices, gl.UNSIGNED_SHORT,0);
 
         time += 0.001;
