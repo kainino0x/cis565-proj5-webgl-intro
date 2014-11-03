@@ -241,8 +241,14 @@
     mat4.rotate(modelbase, 23.4 / 180 * Math.PI, [0.0, 0.0, 1.0]);
     mat4.rotate(modelbase, Math.PI, [1.0, 0.0, 0.0]);
 
+    var perftime = 0.0;
+    var perfiters = 0;
 
     function animate() {
+        if (window.performance) {
+            var perf1 = performance.now();
+        }
+
         ///////////////////////////////////////////////////////////////////////////
         // Update
         var model = mat4.create(modelbase);
@@ -298,6 +304,17 @@
             earthtexbound = true;
         }
         gl.drawElements(gl.TRIANGLES, numberOfIndices, gl.UNSIGNED_SHORT,0);
+
+        if (window.performance) {
+            var perf2 = window.performance.now();
+            perfiters++;
+            perftime += perf2 - perf1;
+            if (perfiters == 300) {
+                console.log(perftime);
+                perftime = 0.0;
+                perfiters = 0;
+            }
+        }
 
         time += 0.001;
         window.requestAnimFrame(animate);

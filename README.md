@@ -53,13 +53,15 @@ Implemented:
 
 ### Performance
 
-I found that I was unable to capture any meaningful data on the actual
-rendering time of each frame, due to lack of granularity and asynchronous GPU
-process offloading (Stats.js [2] always showed 0 or 1 ms per frame).
-However, using Ben Vanik's WebGL Inspector, I was able to find and make a few
-optimizations.
+I found that I was unable to capture any meaningful data using Stats.js [2]
+rendering time of each frame, due to lack of granularity (it always showed 0 or
+1 ms per frame). However, using the `performance` API, I was able to make some
+measurements. Additionally, using Ben Vanik's WebGL Inspector, I was able to
+find and make a few optimizations.
 
 Before optimization:
+
+| Total rendering time over 300 frames | ~xxx ms |
 
 ![](images/globe_trace.png)
 
@@ -68,6 +70,8 @@ Before optimization:
 * Only set the earth texture uniforms once
 
 After optimization:
+
+| Total rendering time over 300 frames | ~xxx ms |
 
 ![](images/globe_trace_after.png)
 
