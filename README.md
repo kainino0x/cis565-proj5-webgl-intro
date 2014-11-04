@@ -6,6 +6,8 @@ CIS 565 Project 5: WebGL
 
 **[Live demo](https://kainino0x.github.io/Project5-WebGL/)**
 
+**[Demo video](http://youtu.be/yTLYuimgv24)**
+
 
 Part 1
 ------
