@@ -64,12 +64,12 @@ find and make a few optimizations.
 * Only set the earth texture uniforms once
 * Only compute the light position and camera matrices when the camera is moved
 
-|   | Total rendering time over 300 frames |
-|:- | ------------------------------------:|
-| Before optimization | ~18.5 ms |
-| + Factored out model matrix calculation | ~16.5 ms |
-| + Fewer texture uniform sets | ~15.5 ms |
-| + Fewer uniform uploads | ~14.5 ms |
+| Stage                          | Total rendering time over 300 frames |
+|:------------------------------ | ------------------------------------:|
+| Before optimization            |                             ~18.5 ms |
+| Factored out model matrix calc |                             ~16.5 ms |
+| Fewer texture uniform sets     |                             ~15.5 ms |
+| Fewer uniform uploads          |                             ~14.5 ms |
 
 Before optimization:
 
