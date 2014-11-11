@@ -33,6 +33,8 @@ Part 2
 
 ![](images/globe.png)
 
+![](images/globe_diagram.png)
+
 Given code:
 
 * Reading and loading textures
