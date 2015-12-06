@@ -4,7 +4,7 @@ CIS 565 Project 5: WebGL
 * Kai Ninomiya (Arch Linux, Intel i5-2410M)
   (Performance numbers taken on i5-4xxx/GTX 750)
 
-**[Live demo](https://kainino0x.github.io/Project5-WebGL/)**
+**[Live demo](http://kainino0x.github.io/cis565-proj5-webgl-intro/)**
 
 **[Demo video](http://youtu.be/yTLYuimgv24)**
 
